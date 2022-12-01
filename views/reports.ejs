@@ -1,0 +1,53 @@
+<%-include("./_partials/header")-%>
+<head>
+    <style>
+        th, td {
+            padding: 0.5rem 0 1rem 0;
+            height: 2rem,
+        }
+    </style>
+</head>
+<body>
+    <main class="my-16 mx-auto w-2/3 flex flex-col justify-center items-center gap-16 text-2xl">
+        <h1 class="text-5xl">List Report</h1>
+        <div class="flex flex-row" id="searchDiv">
+            <form>
+                <input type="text" placeholder="Search by event..">
+                <input type="text" placeholder="Search by age..">
+                <input  class="bg-cyan-900 text-white px-2 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900" 
+                type="submit" value="Search">
+            </form>
+        </div>
+        <div>
+            Age notif box
+        </div>
+        <table class="table-auto w-full text-left">
+            <thead class="border-b-4 border-black">
+                <th>Date</th>
+                <th>Event</th>
+                <th>Actions</th>
+            </thead>
+            <% data.forEach (el => { %>
+            <tr class="border-b-2 border-zinc-300">
+                <td><%=el.date.toLocaleDateString("id", options)%></td>
+                <td><%=el.event%></td>
+                <td class="flex flex-row">
+                    <a class="text-white bg-green-500 px-4 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900 h-10 flex items-center">See Detail</a>
+                    <a class="text-white bg-red-500 px-4 py-2 duration-200 hover:bg-white hover:text-red-500 h-10 flex items-center">Delete</a>
+                </td>
+            </tr>
+            <% }) %>  
+        </table>
+        <div class="flex flex-col items-center gap-8">
+            <p>This is a platform where you can post any event in your surrounding.</p>
+            <p>With this platform, JPD is trying to make your reporting experience more enjoyable.</p>
+        </div>
+        <div class="flex flex-row gap-12">
+            <a href="/reports/add" class="bg-cyan-900 text-white rounded-lg px-4 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900
+                border-cyan-900 border-4">Post Report Now</a>
+            <a href="/reports" class="bg-cyan-900 text-white rounded-lg px-4 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900
+                border-cyan-900 border-4">List Report</a>
+        </div>
+    </main>
+</body>
+</html>
