@@ -1,30 +1,95 @@
 const {Report} = require('../models');
+const { Op } = require("sequelize");
 
 class Controller {
     static home(req, res) {
         res.render('home')
-      }
+    }
 
     static reports(req, res) {
+        const searchQuery = req.query
+        let filter = {}
+        if (searchQuery.event) {
+            filter.event = {
+                [Op.iLike]: `%${searchQuery.event}%`
+            }
+        }
+        if (searchQuery.age) {
+            filter.age =  searchQuery.age  
+        }
+
+        let reportData
         Report.findAll({
-            attributes: ['id', ["dateOfEvent", 'date'], "event"],
-            order: ["dateOfEvent"]
+            attributes: ['id', "dateOfEvent", "event"],
+            order: ["dateOfEvent"],
+            where: filter
         })
         .then(data => {
-            const dataSent = data.map(el => {
-                return el.dataValues
-            })
+            reportData = data
+            return Report.getAgeDetail()
+        })
+        .then(ageDetail => {
             const options = {
                 weekday: "long",
                 year: "numeric",
                 month: "long",
                 day: "numeric",
             };
-            console.log(dataSent)
-            res.render('reports', {data: dataSent, options})
+            res.render('reports', {reportData, options, searchQuery, ageDetail: ageDetail[0].dataValues})
         })
         .catch(err => {
-            console.log(err)
+            res.send(err)
+        })
+    }
+
+    static addForm(req, res) {
+        res.render('formAdd')
+    }
+
+    static createReportPost(req, res) {
+        const data = req.body
+        Report.create(data)
+        .then(res.redirect('/reports'))
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static reportDetail(req, res) {
+        const id = req.params.id
+        Report.findByPk(id)
+        .then(data => {
+            res.render('formEdit', {data})
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static updateReport(req, res) {
+        const data = req.body
+        const id = +req.params.id
+        Report.update(data, {
+            where: {
+                id
+            }
+        })
+        .then(res.redirect('/reports'))
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static delete(req,res) {
+        const id = req.params.id
+        Report.destroy({
+            where: {
+                id
+            }
+        })
+        .then(res.redirect('/reports'))
+        .catch(err => {
+            res.send(err)
         })
     }
 }

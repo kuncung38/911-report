@@ -5,21 +5,53 @@
             padding: 0.5rem 0 1rem 0;
             height: 2rem,
         }
+
+        input {
+            height: 100%;
+        }
+
+        .isDisabled {
+            opacity:0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
-    <main class="my-16 mx-auto w-2/3 flex flex-col justify-center items-center gap-16 text-2xl">
+    <main class="my-16 mx-auto w-4/5 flex flex-col justify-center items-center gap-8 text-xl">
         <h1 class="text-5xl">List Report</h1>
-        <div class="flex flex-row" id="searchDiv">
-            <form>
-                <input type="text" placeholder="Search by event..">
-                <input type="text" placeholder="Search by age..">
-                <input  class="bg-cyan-900 text-white px-2 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900" 
+        <div class="flex flex-row w-full justify-center" id="searchDiv">
+            <form class="w-full flex flex-row justify-between gap-3 h-11" action="/reports?" method="GET">
+                <div class="w-3/4 flex flex-row items-center justify-center bg-white border-2 border-cyan-900 px-2">
+                    <svg class="h-5/6" 
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
+                    </svg>
+                    <input class="w-full border-none focus:outline-none" 
+                            id="eventSearch" type="text" name="event" placeholder="Search by event.."
+                            value="<%= searchQuery.event %>">
+                    <a onclick="document.getElementById('eventSearch').value = ''"
+                        class="cursor-pointer">✖</a>
+                </div>
+                <div class="w-1/4 flex flex-row items-center justify-center bg-white border-2 border-cyan-900 px-2">
+                    <svg class="h-5/6" 
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
+                    </svg>
+                    <input class="w-full border-none focus:outline-none"  
+                            id="ageSearch" type="number" name="age" placeholder="Search by age.."
+                            value="<%= searchQuery.age %>">
+                    <a onclick="document.getElementById('ageSearch').value = ''"
+                        class="cursor-pointer">✖</a>
+                </div>
+                <input style="text-align: center;" class="bg-cyan-900 text-white border-cyan-900 border-4 px-4 py-1 rounded-md duration-200 hover:bg-red-100 hover:text-cyan-900" 
                 type="submit" value="Search">
             </form>
         </div>
-        <div>
-            Age notif box
+        <div class="w-full h-16 flex flex-row justify-between items-center px-8 py-2 bg-orange-200 opacity-90 duration-300"
+            id="ageInfo">
+            <p class="w-full text-orange-500 text-center">The oldest person is <%=ageDetail.max%> years old, the youngest is <%=ageDetail.min%> years old, and average all age is <%=Math.round(ageDetail.avg)%> years old</p>
+            <a class="text-orange-500 cursor-pointer"
+                onclick="document.getElementById('ageInfo').classList.toggle('isDisabled')">✖</a>
         </div>
         <table class="table-auto w-full text-left">
             <thead class="border-b-4 border-black">
@@ -27,27 +59,19 @@
                 <th>Event</th>
                 <th>Actions</th>
             </thead>
-            <% data.forEach (el => { %>
+            <% reportData.forEach (el => { %>
             <tr class="border-b-2 border-zinc-300">
-                <td><%=el.date.toLocaleDateString("id", options)%></td>
+                <td><%=el.dateOfEvent.toLocaleDateString("id", options)%></td>
                 <td><%=el.event%></td>
-                <td class="flex flex-row">
-                    <a class="text-white bg-green-500 px-4 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900 h-10 flex items-center">See Detail</a>
-                    <a class="text-white bg-red-500 px-4 py-2 duration-200 hover:bg-white hover:text-red-500 h-10 flex items-center">Delete</a>
+                <td class="flex flex-row gap-8">
+                    <a class="text-white bg-green-500 border-green-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-green-500 h-10 flex items-center rounded-md"
+                        href="/reports/<%=el.id%>">See Detail</a>
+                    <a class="text-white bg-red-500 border-red-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-red-500 h-10 flex items-center rounded-md"
+                        href="/reports/<%=el.id%>/delete">Delete</a>
                 </td>
             </tr>
             <% }) %>  
         </table>
-        <div class="flex flex-col items-center gap-8">
-            <p>This is a platform where you can post any event in your surrounding.</p>
-            <p>With this platform, JPD is trying to make your reporting experience more enjoyable.</p>
-        </div>
-        <div class="flex flex-row gap-12">
-            <a href="/reports/add" class="bg-cyan-900 text-white rounded-lg px-4 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900
-                border-cyan-900 border-4">Post Report Now</a>
-            <a href="/reports" class="bg-cyan-900 text-white rounded-lg px-4 py-2 duration-200 hover:bg-red-100 hover:text-cyan-900
-                border-cyan-900 border-4">List Report</a>
-        </div>
     </main>
 </body>
 </html>
