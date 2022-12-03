@@ -19,6 +19,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-     return queryInterface.renameColumn('Reports', 'dateOfEvent', 'doe')
+    return queryInterface.renameColumn('Reports', 'dateOfEvent', 'doe')
   }
 };

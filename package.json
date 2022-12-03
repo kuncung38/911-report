@@ -4,7 +4,7 @@
   "description": "```txt\r Competency :\r - OOP\r - Callback\r - Schema Database PostgreSQL\r - Express\r - EJS\r - Promise\r - Sequelize (ORM)\r ```",
   "main": "index.js",
   "scripts": {
-    "devcss": "npx tailwindcss styles/tailwind.css -o styles/style.css -w",
+    "devcss": "npx tailwindcss assets/tailwind.css -o assets/style.css -w",
     "dev": " nodemon app.js"
   },
   "repository": {

@@ -19,9 +19,9 @@
 <body>
     <main class="my-16 mx-auto w-4/5 flex flex-col justify-center items-center gap-8 text-xl">
         <h1 class="text-5xl">List Report</h1>
-        <div class="flex flex-row w-full justify-center" id="searchDiv">
+        <div id="searchDiv" class="flex flex-row w-full justify-center">
             <form class="w-full flex flex-row justify-between gap-3 h-11" action="/reports?" method="GET">
-                <div class="w-3/4 flex flex-row items-center justify-center bg-white border-2 border-cyan-900 px-2">
+                <div class="w-3/4 flex flex-row items-center justify-center gap-2 bg-white border-2 border-cyan-900 px-2">
                     <svg class="h-5/6" 
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
@@ -32,13 +32,13 @@
                     <a onclick="document.getElementById('eventSearch').value = ''"
                         class="cursor-pointer">✖</a>
                 </div>
-                <div class="w-1/4 flex flex-row items-center justify-center bg-white border-2 border-cyan-900 px-2">
+                <div class="w-1/4 flex flex-row items-center justify-center gap-2 bg-white border-2 border-cyan-900 px-2">
                     <svg class="h-5/6" 
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
                     </svg>
                     <input class="w-full border-none focus:outline-none"  
-                            id="ageSearch" type="number" name="age" placeholder="Search by age.."
+                            id="ageSearch" type="number" name="age" placeholder="Search by age.." min="0"
                             value="<%= searchQuery.age %>">
                     <a onclick="document.getElementById('ageSearch').value = ''"
                         class="cursor-pointer">✖</a>
@@ -47,31 +47,52 @@
                 type="submit" value="Search">
             </form>
         </div>
+        <!-- Information box -->
         <div class="w-full h-16 flex flex-row justify-between items-center px-8 py-2 bg-orange-200 opacity-90 duration-300"
             id="ageInfo">
+            <svg class="h-4/6 text-orange-500" 
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg> 
             <p class="w-full text-orange-500 text-center">The oldest person is <%=ageDetail.max%> years old, the youngest is <%=ageDetail.min%> years old, and average all age is <%=Math.round(ageDetail.avg)%> years old</p>
             <a class="text-orange-500 cursor-pointer"
                 onclick="document.getElementById('ageInfo').classList.toggle('isDisabled')">✖</a>
         </div>
-        <table class="table-auto w-full text-left">
-            <thead class="border-b-4 border-black">
-                <th>Date</th>
-                <th>Event</th>
-                <th>Actions</th>
-            </thead>
-            <% reportData.forEach (el => { %>
-            <tr class="border-b-2 border-zinc-300">
-                <td><%=el.dateOfEvent.toLocaleDateString("id", options)%></td>
-                <td><%=el.event%></td>
-                <td class="flex flex-row gap-8">
-                    <a class="text-white bg-green-500 border-green-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-green-500 h-10 flex items-center rounded-md"
-                        href="/reports/<%=el.id%>">See Detail</a>
-                    <a class="text-white bg-red-500 border-red-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-red-500 h-10 flex items-center rounded-md"
-                        href="/reports/<%=el.id%>/delete">Delete</a>
-                </td>
-            </tr>
-            <% }) %>  
-        </table>
+        <!-- Data table -->
+        <% if (reportData.length)  { %>
+            <table class="table-auto w-full text-left">
+                <thead class="border-b-4 border-black">
+                    <th>Date</th>
+                    <th>Event</th>
+                    <th>Actions</th>
+                </thead>
+                <% reportData.forEach (el => { %>
+                <tr class="border-b-2 border-zinc-300">
+                    <td><%=el.dateOfEvent.toLocaleDateString("id", options)%></td>
+                    <td><%=el.event%></td>
+                    <td class="flex flex-row gap-8">
+                        <a class="text-white bg-green-500 border-green-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-green-500 h-10 flex items-center rounded-md"
+                            href="/reports/<%=el.id%>">See Detail</a>
+                        <a class="text-white bg-red-500 border-red-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-red-500 h-10 flex items-center rounded-md"
+                            href="/reports/<%=el.id%>/delete">Delete</a>
+                    </td>
+                </tr>
+                <% }) %>  
+            </table>
+        <% }else { %>
+            <svg width="200" height="150" xmlns="http://www.w3.org/2000/svg" class="mt-8">
+                <g>
+                    <title>Layer 1</title>
+                    <path id="svg_9" d="m226.4,403.8" opacity="NaN" stroke-width="2" stroke="#164E63" fill="none"/>
+                    <g stroke="null" id="svg_12">
+                        <ellipse stroke="#164E63" stroke-width="2" ry="19.73037" rx="17.61017" id="svg_1" cy="54.05074" cx="127.8442" fill="none"/>
+                        <ellipse stroke="#164E63" stroke-width="2" ry="19.73037" rx="17.61017" id="svg_5" cy="53.53037" cx="66.46017" fill="none"/>
+                        <path stroke="#164E63" id="svg_11" d="m38.4,124.86326c65.40922,-30.35442 120.77098,0 120.60066,-0.34691" opacity="NaN" stroke-width="2" fill="none"/>
+                    </g>
+                </g>
+            </svg>
+            <h1>Sorry, we couldn't find any result!</h1>
+        <% } %>
     </main>
 </body>
 </html>

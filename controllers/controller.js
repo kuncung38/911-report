@@ -59,10 +59,11 @@ class Controller {
         const id = req.params.id
         Report.findByPk(id)
         .then(data => {
-            res.render('formEdit', {data})
+            data ? res.render('formEdit', {data}) : res.render('404')
         })
         .catch(err => {
-            res.send(err)
+            console.log(err)
+            res.render(404)
         })
     }
 
