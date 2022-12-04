@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         attributes: [
           [sequelize.fn('MAX', sequelize.col('age')), 'max'],
           [sequelize.fn('MIN', sequelize.col('age')), 'min'],
-          [sequelize.fn('AVG', sequelize.col('age')), 'avg']
+          [sequelize.fn('ROUND', sequelize.fn('AVG', sequelize.col('age'))), 'avg']
         ]
       })
     }

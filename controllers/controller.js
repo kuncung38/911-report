@@ -7,15 +7,15 @@ class Controller {
     }
 
     static reports(req, res) {
-        const searchQuery = req.query
+        const {event, age} = req.query
         let filter = {}
-        if (searchQuery.event) {
+        if (event) {
             filter.event = {
-                [Op.iLike]: `%${searchQuery.event}%`
+                [Op.iLike]: `%${event}%`
             }
         }
-        if (searchQuery.age) {
-            filter.age =  searchQuery.age  
+        if (age) {
+            filter.age =  age  
         }
 
         let reportData
@@ -35,7 +35,7 @@ class Controller {
                 month: "long",
                 day: "numeric",
             };
-            res.render('reports', {reportData, options, searchQuery, ageDetail: ageDetail[0].dataValues})
+            res.render('reports', {reportData, options, event, age, ageDetail: ageDetail[0].dataValues})
         })
         .catch(err => {
             res.send(err)
@@ -49,7 +49,7 @@ class Controller {
     static createReportPost(req, res) {
         const data = req.body
         Report.create(data)
-        .then(res.redirect('/reports'))
+        .then(() => res.redirect('/reports'))
         .catch(err => {
             res.send(err)
         })
@@ -63,7 +63,7 @@ class Controller {
         })
         .catch(err => {
             console.log(err)
-            res.render(404)
+            res.render('404')
         })
     }
 
@@ -75,7 +75,7 @@ class Controller {
                 id
             }
         })
-        .then(res.redirect('/reports'))
+        .then(() => res.redirect('/reports'))
         .catch(err => {
             res.send(err)
         })
@@ -88,7 +88,7 @@ class Controller {
                 id
             }
         })
-        .then(res.redirect('/reports'))
+        .then(() => res.redirect('/reports'))
         .catch(err => {
             res.send(err)
         })
