@@ -73,7 +73,7 @@
                         <th class="border-b-4 border-black">Actions</th>
                 </thead>
                 <% reportData.forEach (el => { %>
-                <tr>
+                <tr class="duration-200 hover:bg-red-200">
                     <td><%=el.dateOfEvent.toLocaleDateString("id", options)%></td>
                     <td><%=el.event%></td>
                     <td class="flex flex-row gap-8">
