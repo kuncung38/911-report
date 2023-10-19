@@ -1,17 +1,2 @@
-# 911 Report
-
-```txt
-Competency :
-- OOP
-- Callback
-- Schema Database PostgreSQL
-- Express
-- EJS
-- Promise
-- Sequelize (ORM)
-```
-
-Challenge ini di nilai 💯.
-Untuk melihat deadline silahkan cek spreadsheet standup.
-
-Tugas weekendmu adalah mengeksplor `Sequelize`.
+# 911-report
+Showcase for my Hacktiv8 P1
