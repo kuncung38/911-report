@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         ]
       })
     }
+
+    get dateOfEventLocalized() {
+      return  this.getDataValue('dateOfEvent').toLocaleDateString('en-GB').split('/').reverse().join('-')
+    }
   }
   Report.init({
     firstName: DataTypes.STRING,
@@ -37,5 +41,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Report',
   });
+
   return Report;
 };

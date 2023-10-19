@@ -10,6 +10,7 @@ const config = {
     username: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     port: 5432,
+    logging: false,
     dialectOptions: {
       project: process.env.ENDPOINT_ID,
       ssl: {
@@ -32,6 +33,7 @@ const config = {
     username: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     port: 5432,
+    logging: false,
     dialectOptions: {
       project: process.env.ENDPOINT_ID,
       ssl: {
