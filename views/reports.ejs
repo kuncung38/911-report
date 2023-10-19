@@ -1,0 +1,104 @@
+<%-include("./_partials/header")-%>
+<head>
+    <style>
+        th, td {
+            padding: 0.5rem 0 1rem 0;
+            height: 2rem,
+        }
+
+        td {
+            border-bottom-width: 2px;
+            border-color: rgb(212 212 216);
+        }
+
+        input {
+            height: 100%;
+        }
+
+        .isDisabled {
+            opacity:0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <main class="my-16 mx-auto w-4/5 flex flex-col justify-center items-center gap-5 text-xl">
+        <h1 class="text-5xl">List Report</h1>
+        <div id="searchDiv" class="flex flex-row w-full justify-center bg-red-100 py-6 sticky top-[4.5rem] z-20">
+            <form class="w-full flex flex-row justify-between gap-3 h-11" action="/reports?" method="GET">
+                <div class="w-3/4 flex flex-row items-center justify-center gap-2 bg-white border-2 border-cyan-900 px-4">
+                    <svg class="h-4/6" 
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
+                    </svg>
+                    <input class="w-full border-none focus:outline-none" 
+                            id="eventSearch" type="text" name="event" placeholder="Search by event.."
+                            value="<%= event %>">
+                    <a onclick="document.getElementById('eventSearch').value = ''"
+                        class="cursor-pointer hover:text-orange-500 active:text-lg">✖</a>
+                </div>
+                <div class="w-1/4 flex flex-row items-center justify-center gap-2 bg-white border-2 border-cyan-900 px-4">
+                    <svg class="h-4/6" 
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clip-rule="evenodd" />
+                    </svg>
+                    <input class="w-full border-none focus:outline-none"  
+                            id="ageSearch" type="number" name="age" placeholder="Search by age.." min="0"
+                            value="<%= age %>">
+                    <a onclick="document.getElementById('ageSearch').value = ''"
+                        class="cursor-pointer hover:text-orange-500 active:text-lg">✖</a>
+                </div>
+                <input style="text-align: center;" type="submit" value="Search" 
+                        class="cursor-pointer bg-cyan-900 text-white border-cyan-900 border-4 px-4 py-1 rounded-md duration-200 hover:bg-red-100 hover:text-cyan-900 relative active:top-1" 
+                >
+            </form>
+        </div>
+        <!-- Information box -->
+        <div class="w-full h-16 flex flex-row justify-between items-center px-8 py-2 bg-orange-200 opacity-90 duration-300"
+            id="ageInfo">
+            <svg class="h-4/6 text-orange-500" 
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg> 
+            <p class="w-full text-orange-500 text-center">The oldest person is <%=ageDetail.max%> years old, the youngest is <%=ageDetail.min%> years old, and average all age is <%=ageDetail.avg%> years old</p>
+            <a class="text-orange-500 cursor-pointer"
+                onclick="document.getElementById('ageInfo').classList.toggle('isDisabled')">✖</a>
+        </div>
+        <!-- Data table -->
+        <% if (reportData.length)  { %>
+            <table class="table-auto w-full text-left border-separate">
+                <thead class="sticky top-40 z-40 bg-red-100"> 
+                        <th class="border-b-4 border-black">Date</th>
+                        <th class="border-b-4 border-black">Event</th>
+                        <th class="border-b-4 border-black">Actions</th>
+                </thead>
+                <% reportData.forEach (el => { %>
+                <tr class="duration-200 hover:bg-red-200">
+                    <td><%=el.dateOfEvent.toLocaleDateString("id", options)%></td>
+                    <td><%=el.event%></td>
+                    <td class="flex flex-row gap-8">
+                        <a class="text-white bg-green-500 border-green-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-green-500 h-10 flex items-center rounded-md relative active:top-1"
+                            href="/reports/<%=el.id%>">See Detail</a>
+                        <a class="text-white bg-red-500 border-red-500 border-2 px-4 py-2 duration-200 hover:bg-white hover:text-red-500 h-10 flex items-center rounded-md relative active:top-1"
+                            href="/reports/<%=el.id%>/delete">Delete</a>
+                    </td>
+                </tr>
+                <% }) %>  
+            </table>
+        <% }else { %>
+            <svg width="200" height="150" xmlns="http://www.w3.org/2000/svg" class="mt-8">
+                <g>
+                    <title>Layer 1</title>
+                    <path id="svg_9" d="m226.4,403.8" opacity="NaN" stroke-width="2" stroke="#164E63" fill="none"/>
+                    <g stroke="null" id="svg_12">
+                        <ellipse stroke="#164E63" stroke-width="2" ry="19.73037" rx="17.61017" id="svg_1" cy="54.05074" cx="127.8442" fill="none"/>
+                        <ellipse stroke="#164E63" stroke-width="2" ry="19.73037" rx="17.61017" id="svg_5" cy="53.53037" cx="66.46017" fill="none"/>
+                        <path stroke="#164E63" id="svg_11" d="m38.4,124.86326c65.40922,-30.35442 120.77098,0 120.60066,-0.34691" opacity="NaN" stroke-width="2" fill="none"/>
+                    </g>
+                </g>
+            </svg>
+            <h1>Sorry, we couldn't find any result!</h1>
+        <% } %>
+    </main>
+</body>
+</html>
