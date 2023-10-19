@@ -4,6 +4,7 @@
   "description": "```txt\r Competency :\r - OOP\r - Callback\r - Schema Database PostgreSQL\r - Express\r - EJS\r - Promise\r - Sequelize (ORM)\r ```",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
     "devcss": "npx tailwindcss -i assets/tailwind.css -o assets/style.css -w",
     "dev": " nodemon app.js"
   },
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/hck-53-arsenic-fox/911-report#readme",
   "dependencies": {
+    "@flydotio/dockerfile": "^0.4.10",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
